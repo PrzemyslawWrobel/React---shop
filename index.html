@@ -12,10 +12,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1> Uczę się react</h1>
+                    <h1> Witaj w EduWeb! </h1>
+                    
+                    <div id="kurs">
+    
+                    </div>
+                
                 </div>
             </div>
-
         </div>
-    </body>
+    
+        <script type="text/javascript">
+            var div = React.createElement('div',{}, 
+                            React.createElement('h3',{},'Kurs React'), 
+                            React.createElement('p',{},'React od podstaw')
+                    )
+            
+            ReactDOM.render(div, document.getElementById('kurs'))
+        </script>
 </html>
