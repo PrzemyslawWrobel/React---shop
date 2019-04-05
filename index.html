@@ -34,22 +34,22 @@
 	</div>
 
 	<script type="text/javascript">
-		var div = React.DOM.div;
+//		var div = React.DOM.div;
 
 		var font_size = 3;
 		var progress = 20;
 
 		var course = function(){
-			return div({id:'kurs', className:'media course'},
-						div({className:'media-left'},
+			return React.createElement('div',{id:'kurs', className:'media course'},
+						React.createElement('div', {className:'media-left'},
 							React.createElement('img',{className:'media-object', alt:'Miniatura Kursu', src:'http://placekitten.com/200/200' })
 						),
-						div({className:'media-body'},
+						React.createElement('div',{className:'media-body'},
 							React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }},'Kurs React'), 
 							React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' }},'React od podstaw'),
 							'Ładowanie...',
-							div({className:'progress'},
-								div({className:'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'}},
+							React.createElement('div',{className:'progress'},
+                                    React.createElement('div',{className:'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'}},
 									React.createElement('span',{}, progress + ' %'))
 							)
 						)
