@@ -27,31 +27,33 @@
 			
 				<button class="btn btn-default" id="grow"> + </button>
 				<button class="btn btn-default" id="shrink"> - </button>
-				<button class="btn btn-default" id="start"> Start </button>
-				<button class="btn btn-default" id="stop"> Stop </button>
+				<button class="btn btn-default" id="prev"> Prev </button>
+				<button class="btn btn-default" id="next"> Next </button>
 			</div>
 		</div>
 	</div>
-
+	<script type="text/javascript" src="courses_data.js"></script>
 	<script type="text/javascript">
-//		var div = React.DOM.div;
+		var div = React.DOM.div;
 
 		var font_size = 3;
-		var progress = 5;
+		var progress = 20;
 
-		var course = function(){
-			return React.createElement('div',{id:'kurs', className:'media course'},
-						React.createElement('div', {className:'media-left'},
-							React.createElement('img',{className:'media-object', alt:'Miniatura Kursu', src:'http://placekitten.com/200/200' })
+		var index = 0
+		var data = courses_data[index]
+
+		var course = function(data){
+			var IsNew = data.is_new? React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Nowość!') : null;
+
+			return div({id:'kurs', className:'media course'},
+						div({className:'media-left'},
+							React.createElement('img',{className:'media-object', alt:'Miniatura Kursu', src: data.image })
 						),
-						React.createElement('div',{className:'media-body'},
-							React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }},'Kurs React'), 
-							React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' }},'React od podstaw'),
-							'Ładowanie...',
-							React.createElement('div',{className:'progress'},
-                                    React.createElement('div',{className:'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'}},
-									React.createElement('span',{}, progress + ' %'))
-							)
+						div({className:'media-body'},
+							React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }}, data.title), 
+							React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' }}, data.description), 
+							IsNew, 
+							data.is_promo? React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Promocja!') : null
 						)
 					);
 		}
@@ -64,21 +66,18 @@
 			font_size = font_size === 1? font_size : (font_size - 1);
 			render()
 		})
-		var interval;
-		document.getElementById('start').addEventListener('click', function() {
-            interval = setInterval(function(){
-                progress = progress + 1;
-                render() 
-            },300)
-   	
+		document.getElementById('prev').addEventListener('click', function() {
+			index = index===0? 0 : (index - 1);
+			render()
 		})
-		document.getElementById('stop').addEventListener('click', function() {
-			clearInterval(interval)
+		document.getElementById('next').addEventListener('click', function() {
+			index = index+1;
 			render()
 		})
 
 		function render(){
-			ReactDOM.render(course(), document.getElementById('root'))
+			data = courses_data[index]
+			ReactDOM.render(course(data), document.getElementById('root'))
 		}
 		render()
 	</script>
