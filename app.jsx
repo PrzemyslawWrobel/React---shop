@@ -19,7 +19,7 @@ var course = (
 
   		{/* Course content column */}
   		<div className="media-body">
-	  		<h3>{data.title} {data.is_new? <span className="label label-default">Nowy!</span> : null}</h3>
+	  		<h3>{data.title} {data.is_new? <span className="badge badge-secondary">Nowy!</span> : null}</h3>
   			<p>{data.description}</p>
 
 	  		{/* Promotion */}
