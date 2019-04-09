@@ -12,10 +12,10 @@ var CoursePromoLabel = function(data){
 
 var CourseActions = function(data){
 	return (
-		<div className="btn-group pull-right">
-			<button className="btn btn-default">Szczególy kursu</button>
-			<button className="btn btn-default">Dodaj do ulubionych</button>
-			<button className="btn btn-default">Dodaj do koszyka</button>
+		<div className="btn-group">
+			<button className="btn btn-secondary">Szczególy kursu</button>
+			<button className="btn btn-secondary">Dodaj do ulubionych</button>
+			<button className="btn btn-secondary">Dodaj do koszyka</button>
 		</div>
 	) 
 }
@@ -66,20 +66,21 @@ var Course = function(data){
 	)
 }
 
-var data = {
-	"id": 0,
-	"title": "Kurs Programowanie w jQuery - w Praktyce",
-	"description": "Poznaj jQuery, czyli najbardziej popularną bibliotekę JavaScript na Świecie! Z jQuery korzystają niemal wszystkie nowoczesne serwisy WWW, a nasz Kurs stanowi niezwykle praktyczne i wyczerpujące omówienie tej biblioteki od podstaw, aż po bardziej zaawansowane techniki. Jeśli znasz już HTML i CSS oraz przynajmniej podstawy JavaScript, jQuery to kolejna obowiązkowa pozycja na Twojej drodze do tworzenia świetnych serwisów internetowych. ",
-	"image": "http://eduweb.pl/Images/Training/miniaturka-do-opisu-kursu_27ded9b2-af48-4118-a02a-e35fe950a9be.png",
-	"author": "Piotr Palarz",
-	"duration": "8 godzin",
-	"categories": ["JavaScript", "jQuery"],
-	"is_new": true,
-	"is_new": true,
-	"is_promo": true
+var CoursesList = function(list){
+	return (
+		<div>
+			{list.map(function(data){
+				return <div key={data.id}>{ Course(data) }</div>
+			})}
+		</div>
+	)
 }
 
-ReactDOM.render(Course(data), document.getElementById('root'))	
+var list = courses_data.slice(0,3);
+
+ReactDOM.render(CoursesList(list), document.getElementById('root'))	
+
+	
 
 
 // Wygląd szablonu przed zmianami
