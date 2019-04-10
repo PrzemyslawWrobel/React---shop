@@ -66,6 +66,8 @@ var Course = function(data){
 	)
 }
 
+
+
 var CoursesList = function(list){
 	return (
 		<div>
