@@ -76,7 +76,7 @@ var CoursesList = function(list){
 	)
 }
 
-var list = courses_data.slice(0,4);
+var list = courses_data.slice(0,8);
 
 ReactDOM.render(CoursesList(list), document.getElementById('root'))	
 
