@@ -1,81 +1,69 @@
-var CourseMedia = function(data){
-	return <img src={data.image} alt="cover" />;
-}
+var CourseMedia = ({data}) => ( <img src={data.image} alt="cover" />)
 
-var NewLabel = function(data){
-	return data.is_new? <span className="label label-default">Nowy!</span> : null;
-}
+var NewLabel = ({data}) => ( data.is_new? <span className="label label-default">Nowy!</span> : null)
 
-var CoursePromoLabel = function(data){
-	return data.is_promo? <b>Kurs jest w PROMOCJI!</b> : null;
-}
+var CoursePromoLabel = ({data}) => ( data.is_promo? <b>Kurs jest w PROMOCJI!</b> : null)
 
-var CourseActions = function(data){
-	return (
-		<div className="btn-group pull-right">
-			<button className="btn btn-default">Szczególy kursu</button>
-			<button className="btn btn-default">Dodaj do ulubionych</button>
-			<button className="btn btn-default">Dodaj do koszyka</button>
-		</div>
-	) 
-}
+var CourseActions = ({data}) => (
+	<div className="btn-group pull-right">
+		<button className="btn btn-default">Szczególy kursu</button>
+		<button className="btn btn-default">Dodaj do ulubionych</button>
+		<button className="btn btn-default">Dodaj do koszyka</button>
+	</div>
+)
 
-var CourseDetails = function(data){
-	return (
-	  	<table className="table course_details">
-	  		<tbody>
-		  		<tr>
-		  			<th>Autor</th>
-		  			<td>{data.author}</td>
-	  			</tr>
-		  		<tr>
-		  			<th>Czas trwania</th>
-		  			<td>{data.duration}</td>
-	  			</tr>
-	  		</tbody>
-	  	</table>
-	)
-}
+var CourseDetails = ({data}) => (
+  	<table className="table course_details">
+  		<tbody>
+	  		<tr>
+	  			<th>Autor</th>
+	  			<td>{data.author}</td>
+  			</tr>
+	  		<tr>
+	  			<th>Czas trwania</th>
+	  			<td>{data.duration}</td>
+  			</tr>
+  		</tbody>
+  	</table>
+)
 
-var Course = function(props){
-	var data = props.data; 
+var Course = (props) => {
+	var {data} = props;
 
 	return (
 	  	<div className="media course">
 
 	  		{/* Course media column */}
 	  		<div className="media-left">
-	  			{ CourseMedia(data) }
+	  			<CourseMedia {...props} />
 	  		</div>
 
 	  		{/* Course content column */}
 	  		<div className="media-body">
-		  		<h3>{data.title} {NewLabel(data)}</h3>
+		  		<h3>{data.title} <NewLabel {...props} /></h3>
 	  			<p>{data.description}</p>
 
 		  		{/* Promotion */}
-	  			{ CoursePromoLabel(data) }
+	  			<CoursePromoLabel {...props} />
 
 		  		{/* Course Actions */}
-		  		{ CourseActions(data) }
+		  		<CourseActions {...props} />
 	  		</div>
 
 		  	{/* Course details column */}
 	  		<div className="media-right">
-	  			{ CourseDetails(data) }
+	  			<CourseDetails {...props} />
 		  	</div>
 		</div>
 	)
 }
 
-var CoursesList = function(props){
+var CoursesList = (props) => {
 	var list = props.list;
 
 	return (
 		<div>
-			{list.map(function(data){
-				return <Course data={data} key={data.id} />
-			})}
+			{list.map((data) => <Course data={data} key={data.id} />)}
 		</div>
 	)
 }
@@ -93,57 +81,4 @@ function update(){
 	
 	ReactDOM.render(<CoursesList list={list} />, document.getElementById('root'));
 }
-update();	
-
-	
-
-
-// Wygląd szablonu przed zmianami
-
-
-// var data = {
-// 	title: 'Temat Kursu',
-// 	description: 'Opis kursu...',
-// 	image: 'http://placehold.it/150x150',
-// 	author: 'Testowy Autor',
-// 	duration: '6 godz',
-// 	is_new: true,
-// 	is_promo: true
-// }
-
-// var course = (
-//   	<div className="media course">
-
-//   		{/* Course media column */}
-//   		<div className="media-left">
-//   			<img src={data.image} alt="cover" />
-//   		</div>
-
-//   		{/* Course content column */}
-//   		<div className="media-body">
-// 	  		<h3>{data.title} {data.is_new? <span className="badge badge-secondary">Nowy!</span> : null}</h3>
-//   			<p>{data.description}</p>
-
-// 	  		{/* Promotion */}
-//   			{data.is_promo? <b>Kurs jest w PROMOCJI!</b> : null }
-//   		</div>
-
-// 	  	{/* Course details column */}
-//   		<div className="media-right">
-// 		  	<table className="table course_details">
-// 		  		<tbody>
-// 			  		<tr>
-// 			  			<th>Autor</th>
-// 			  			<td>{data.author}</td>
-// 		  			</tr>
-// 			  		<tr>
-// 			  			<th>Czas trwania</th>
-// 			  			<td>{data.duration}</td>
-// 		  			</tr>
-// 		  		</tbody>
-// 		  	</table>
-// 	  	</div>
-// 	</div>
-// )
-
-// ReactDOM.render(course, document.getElementById('root'))	
+update();
