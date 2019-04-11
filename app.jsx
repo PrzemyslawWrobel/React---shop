@@ -1,134 +1,120 @@
-var CourseMedia = ({data}) => ( <img src={data.image} alt="cover" />)
 
-var NewLabel = ({data}) => ( data.is_new? <span className="label label-default">Nowy!</span> : null)
-
-var CoursePromoLabel = ({data}) => ( data.is_promo? <b>Kurs jest w PROMOCJI!</b> : null)
-
-var Button = (props) => ( 
-	<button className="btn btn-default"  {...props}>
-		{props.icon? <span className={ "glyphicon glyphicon-" + props.icon }></span> : null}
-		{' '}
-		{props.label}
-	</button>
-)
-
-var CartButton = ({in_cart, className = "btn btn-block", icon, label}) => {
-	return (in_cart? 
-		<Button className={className + " btn-danger"} icon={icon || "remove"} label={label || "Usuń z koszyka"} /> :
-		<Button className={className + " btn-success"} icon={icon || "shopping-cart"} label={label || "Dodaj do koszyka"} />
-	)
-}
-
-var CourseActions = ({data}) => (
-	<div className="btn-group pull-right">
-		<Button label="Szczególy kursu" />
-		<Button label="Dodaj do ulubionych" icon="star" />
-	</div>
-)
-
-var CourseDetails = ({data}) => (
+const CoursesList = ({list}) => (
 	<div>
-	  	<table className="table course_details">
-	  		<tbody>
-		  		<tr>
-		  			<th>Autor</th>
-		  			<td>{data.author}</td>
-	  			</tr>
-		  		<tr>
-		  			<th>Czas trwania</th>
-		  			<td>{data.duration}</td>
-	  			</tr>
-	  		</tbody>
-	  	</table>
-		<CartButton in_cart={false} />
+		<h1> Kursy </h1>
+		<hr />
+		<div>
+			{list.map((data) => <Course data={data} key={data.id} Details={CourseDetails}>
+		  		{/* Promotion */}
+	  			<CoursePromoLabel data={data} />
+
+		  		{/* Course Actions */}
+				<div className="btn-group pull-right">
+					<Button label="Szczególy kursu" />
+					<StateButton />
+				</div>
+			</Course>)}
+		</div>
 	</div>
 )
 
-var CartDetails = (props) => (
-	<CartButton in_cart={true} />
-)
+const StateButton = React.createClass({
 
-var Course = (props) => {
-	var {data, Details} = props;
+	getInitialState: function(){
+		return {
+			active: this.props.active
+		}
+	},
 
-	return (
-	  	<div className="media course">
+	getDefaultProps: function(){
+		return {
+			active: true
+		}
+	},
 
-	  		{/* Course media column */}
-	  		<div className="media-left">
-	  			<CourseMedia {...props} />
-	  		</div>
+	setActive: function(){
+		this.setState({
+			active: true
+		})
+	},
 
-	  		{/* Course content column */}
-	  		<div className="media-body">
-		  		<h3>{data.title} <NewLabel {...props} /></h3>
-	  			<p>{data.description}</p>
+	setInactive: function(){
+		this.setState({
+			active: false
+		})
+	},
 
-		  		{props.children}
-	  		</div>
+	render: function(){
+		return (this.state.active?
+			<Button label="Usuń z ulubionych" icon="star" onClick={this.setInactive} /> :
+			<Button label="Dodaj do ulubionych" icon="star-empty" onClick={this.setActive} />
+		)
+	}
 
-		  	{/* Course details column */}
-		  	{Details?
-		  		<div className="media-right">
-		  			<Details {...props} />
-			  	</div> : null
-			}
-		</div>
-	)
-}
-
-var CoursesList = (props) => {
-	var list = props.list;
-
-	return (
-		<div>
-			<h1> Kursy </h1>
-			<hr />
-			<div>
-				{list.map((data) => <Course data={data} key={data.id} Details={CourseDetails}>
-			  		{/* Promotion */}
-		  			<CoursePromoLabel data={data} />
-
-			  		{/* Course Actions */}
-			  		<CourseActions data={data} />
-				</Course>)}
-			</div>
-		</div>
-	)
-}
-
-var ShoppingCartList = (props) => {
-	var list = props.list;
-
-	return (
-		<div>
-			<h1> Koszyk </h1>
-			<hr />
-			<div>
-				{list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
-					<Button label="Przenieś do ulubionych" icon="star" />
-				</Course>)}
-			</div>
-		</div>
-	)
-}
-
-
-var list = [], page = 1, perpage = 3;
-document.getElementById('show_more').addEventListener('click', function(){
-  page++;
-  update();
 })
 
-var cart_list = courses_data.slice(0,1);
 
-function update(){
-    var count = page * perpage;
-	list = courses_data.slice(0,count);
-	
-	ReactDOM.render(<div>
-		<ShoppingCartList list={cart_list} />
-		<CoursesList list={list} />
-	</div>, document.getElementById('root'));
-}
-update();
+const ShoppingCartList = ({list}) =>(
+	<div>
+		<h1> Koszyk </h1>
+		<hr />
+		<div>
+			{list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
+				<div className="btn-group pull-right">
+					<Button label="Szczegóły kursu" />
+					<Button label="Przenieś do ulubionych" icon="star"/>
+				</div>
+				<div><b>Autor: </b> {data.author} <br/> <b>Czas trwania: </b> {data.duration} </div>
+			</Course>)}
+		</div>
+	</div>
+)
+
+const App = React.createClass({
+
+	getInitialState: function(){
+		return {
+			page: 1,
+			list: this.props.list.slice(0,3)
+		}
+	},
+
+	loadMore: function(){
+		var page = this.state.page + 1;
+
+		this.setState({
+			page: page,
+			list: this.props.list.slice(0, page * 3)
+		})
+	},
+
+	render: function(){
+		return (
+		  <div>
+		    <div className="container">
+		      <div className="row">
+		        <div className="col-xs-12">
+					{/* <ShoppingCartList list={cart_list} /> */}
+					<CoursesList list={this.state.list} />
+		        </div>
+		      </div>
+		      <div className="row">
+		        <div className="col-xs-12">
+		          <hr />
+		          <button className="btn btn-default btn-block" onClick={this.loadMore}> Pokaż więcej ... </button>
+		        </div>
+		      </div>
+		    </div>
+		    <footer className="footer">
+		      <div className="container">
+		        <p> </p>
+		      </div>
+		    </footer>
+		  </div>
+		)
+	}
+})
+
+
+ReactDOM.render(<App list={courses_data} />, document.getElementById('root'));
+
