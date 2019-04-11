@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
+  <script src="https://fb.me/react-15.2.1.js"></script>
+  <script src="https://fb.me/react-dom-15.2.1.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-        <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-     
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.12.0/babel.js"></script>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+  <link rel="stylesheet" href="style.css">
 
-      <div>
-        <div class="container">
-          <div class="row">
-            <div class="col-xs-12">
-              <h1> Kursy </h1>
-              <hr />
-              <div id="root"></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <hr/>
-              <button class="btn btn-secondary btn-block" id="show_more"> Pokaż więcej ... </button>
-            </div>
-          </div>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.12.0/babel.js"></script>
+</head>
+<body>
+
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div id="root"></div>
         </div>
-        <footer class="footer">
-          <div class="container">
-            <p> </p>
-          </div>
-        </footer>
       </div>
-    
-      <script type="text/javascript" src="courses_data.js"></script>
-      <script type="text/babel" src="app.jsx"></script>
-    </body>
-    </html>
+      <div class="row">
+        <div class="col-xs-12">
+          <hr/>
+          <button class="btn btn-default btn-block" id="show_more"> Pokaż więcej ... </button>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p> </p>
+      </div>
+    </footer>
+  </div>
+
+  <script type="text/javascript" src="courses_data.js"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
 <!--
   
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
