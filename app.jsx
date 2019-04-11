@@ -44,6 +44,8 @@ var CourseDetails = ({data}) => (
 	</div>
 )
 
+
+
 var Course = (props) => {
 	var {data} = props;
 
