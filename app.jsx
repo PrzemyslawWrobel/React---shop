@@ -3,7 +3,7 @@ var CourseMedia = function(data){
 }
 
 var NewLabel = function(data){
-	return data.is_new? <span className="badge badge-secondary">Nowy!</span> : null;
+	return data.is_new? <span className="label label-default">Nowy!</span> : null;
 }
 
 var CoursePromoLabel = function(data){
@@ -12,10 +12,10 @@ var CoursePromoLabel = function(data){
 
 var CourseActions = function(data){
 	return (
-		<div className="btn-group">
-			<button className="btn btn-secondary">Szczególy kursu</button>
-			<button className="btn btn-secondary">Dodaj do ulubionych</button>
-			<button className="btn btn-secondary">Dodaj do koszyka</button>
+		<div className="btn-group pull-right">
+			<button className="btn btn-default">Szczególy kursu</button>
+			<button className="btn btn-default">Dodaj do ulubionych</button>
+			<button className="btn btn-default">Dodaj do koszyka</button>
 		</div>
 	) 
 }
@@ -37,7 +37,9 @@ var CourseDetails = function(data){
 	)
 }
 
-var Course = function(data){
+var Course = function(props){
+	var data = props.data; 
+
 	return (
 	  	<div className="media course">
 
@@ -66,21 +68,32 @@ var Course = function(data){
 	)
 }
 
+var CoursesList = function(props){
+	var list = props.list;
 
-
-var CoursesList = function(list){
 	return (
 		<div>
 			{list.map(function(data){
-				return <div key={data.id}>{ Course(data) }</div>
+				return <Course data={data} key={data.id} />
 			})}
 		</div>
 	)
 }
 
-var list = courses_data.slice(0,8);
 
-ReactDOM.render(CoursesList(list), document.getElementById('root'))	
+var list = [], page = 1, perpage = 3;
+document.getElementById('show_more').addEventListener('click', function(){
+  page++;
+  update();
+})
+
+function update(){
+    var count = page * perpage;
+	list = courses_data.slice(0,count);
+	
+	ReactDOM.render(<CoursesList list={list} />, document.getElementById('root'));
+}
+update();	
 
 	
 
