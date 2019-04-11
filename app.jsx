@@ -40,14 +40,16 @@ var CourseDetails = ({data}) => (
 	  			</tr>
 	  		</tbody>
 	  	</table>
-		<CartButton in_cart={true} />
+		<CartButton in_cart={false} />
 	</div>
 )
 
-
+var CartDetails = (props) => (
+	<CartButton in_cart={true} />
+)
 
 var Course = (props) => {
-	var {data} = props;
+	var {data, Details} = props;
 
 	return (
 	  	<div className="media course">
@@ -62,17 +64,15 @@ var Course = (props) => {
 		  		<h3>{data.title} <NewLabel {...props} /></h3>
 	  			<p>{data.description}</p>
 
-		  		{/* Promotion */}
-	  			<CoursePromoLabel {...props} />
-
-		  		{/* Course Actions */}
-		  		<CourseActions {...props} />
+		  		{props.children}
 	  		</div>
 
 		  	{/* Course details column */}
-	  		<div className="media-right">
-	  			<CourseDetails {...props} />
-		  	</div>
+		  	{Details?
+		  		<div className="media-right">
+		  			<Details {...props} />
+			  	</div> : null
+			}
 		</div>
 	)
 }
@@ -85,7 +85,13 @@ var CoursesList = (props) => {
 			<h1> Kursy </h1>
 			<hr />
 			<div>
-				{list.map((data) => <Course data={data} key={data.id} />)}
+				{list.map((data) => <Course data={data} key={data.id} Details={CourseDetails}>
+			  		{/* Promotion */}
+		  			<CoursePromoLabel data={data} />
+
+			  		{/* Course Actions */}
+			  		<CourseActions data={data} />
+				</Course>)}
 			</div>
 		</div>
 	)
@@ -99,7 +105,9 @@ var ShoppingCartList = (props) => {
 			<h1> Koszyk </h1>
 			<hr />
 			<div>
-				{list.map((data) => <Course data={data} key={data.id} />)}
+				{list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
+					<Button label="Przenieś do ulubionych" icon="star" />
+				</Course>)}
 			</div>
 		</div>
 	)
