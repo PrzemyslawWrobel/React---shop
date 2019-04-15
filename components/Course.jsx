@@ -22,7 +22,7 @@ const CourseDetails = ({data}) => (
 	  			</tr>
 	  		</tbody>
 	  	</table>
-		<CartButton in_cart={false} />
+		<CartButton course={data}/>
 	</div>
 )
 
