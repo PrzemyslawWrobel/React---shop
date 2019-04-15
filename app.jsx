@@ -11,35 +11,37 @@ const CoursesList = ({list}) => (
 		  		{/* Course Actions */}
 				<div className="btn-group pull-right">
 					<Button label="Szczególy kursu" />
-					<StateButton active={AppState.state.favourites.indexOf(data.id) !== -1} 
-						onStateChange={(state)=>{
-						state? actions.addFavourite(data.id) : actions.removeFavourite(data.id)
-					}} />
+					<StateButton active={AppState.state.favourites_map[data.id]} 
+						onActivate={()=>actions.addFavourite(data.id)} 
+						onDeactivate={()=>actions.removeFavourite(data.id)}  />
 				</div>
 			</Course>)}
 		</div>
-	    <hr />
-	    <button className="btn btn-default btn-block" onClick={actions.loadMore}> Pokaż więcej ... </button>
 	</div>
 )
 
-const FavouriteCoursesList = ({list}) => (
+const FavouritesCoursesList = ({list}) => (
 	<div>
 		<h1> Ulubione Kursy </h1>
 		<hr />
 		<div>
+			{list.length == 0? <p className="text-center">Brak kursów </p> : null }
 			{list.map((data) => <Course data={data} key={data.id} Details={CourseDetails}>
+		  		{/* Promotion */}
+	  			<CoursePromoLabel data={data} />
+
 		  		{/* Course Actions */}
 				<div className="btn-group pull-right">
 					<Button label="Szczególy kursu" />
-					<Button label="Usuń z ulubionych" icon="remove" 
-						onClick={()=>actions.removeFavourite(data.id)} />
+					<StateButton active={AppState.state.favourites_map[data.id]}  
+								onActivate={()=>actions.addFavourite(data.id)} 
+								onDeactivate={()=>actions.removeFavourite(data.id)}  />
 				</div>
 			</Course>)}
-			{list.length? null : <p className="text-center">Brak ulubionych kursów na liście</p>}
 		</div>
 	</div>
 )
+
 
 const StateButton = React.createClass({
 
@@ -49,33 +51,32 @@ const StateButton = React.createClass({
 		}
 	},
 
+	getDefaultProps: function(){
+		return {
+			active: false,
+			onActivate: function(){},
+			onDeactivate: function(){}
+		}
+	},
+
 	componentWillReceiveProps: function(nextProps){
 		this.setState({
 			active: nextProps.active
 		})
 	},
 
-	getDefaultProps: function(){
-		return {
-			active: false,
-			onStateChange: function(){}
-		}
-	},
-
 	setActive: function(){
 		this.setState({
 			active: true
-		},()=>{
-			this.props.onStateChange(this.state.active)
 		})
+		this.props.onActivate()
 	},
 
 	setInactive: function(){
 		this.setState({
 			active: false
-		},()=>{
-			this.props.onStateChange(this.state.active)
 		})
+		this.props.onDeactivate()
 	},
 
 	render: function(){
@@ -87,111 +88,84 @@ const StateButton = React.createClass({
 
 })
 
-
-const ShoppingCartList = ({list}) =>(
-	<div>
-		<h1> Koszyk </h1>
-		<hr />
-		<div>
-			{list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
-				<div className="btn-group pull-right">
-					<Button label="Szczegóły kursu" />
-					<Button label="Przenieś do ulubionych" icon="star"/>
-				</div>
-				<div><b>Autor: </b> {data.author} <br/> <b>Czas trwania: </b> {data.duration} </div>
-			</Course>)}
-		</div>
-	</div>
-)
-
 function StateStore(){
 	this.state = {}
 
-	this.listeners =[];
+	this.dispatchEvents = ()=> {
+		this.callback(this.state)
+	}	
 
-	this.addListener = function(callback){
-		this.listeners.push(callback)
+	this.callback = function(){};
+
+	this.addListener = (callback) => {
+		this.callback = callback;
 	}
 
-	this.createAction = function(name, callback){
-		var self = this;
-
+	this.createAction = function(handler){
+		var state = this.state;
 		return function(){
-			callback.apply(self, arguments);
-			self.dispatchEvents()
-		}
-	}
+			handler.apply(state, arguments);
 
-	this.createActions = function(handlersObj){
-		let actions = {};
-		for(name in handlersObj){
-			actions[name] = this.createAction(name, handlersObj[name])
+			AppState.dispatchEvents();
+		}
+	},
+
+	this.createActions = function(handlersMap){
+		var actions = {}
+		for(let name in handlersMap){
+			actions[name] = this.createAction(handlersMap[name])
 		}
 		return actions;
 	}
-
-	this.dispatchEvents = function(){
-		for(let listener of this.listeners){
-			listener(this.state)
-		}
-	}
 }
-const AppState = new StateStore();
+
+var AppState = new StateStore()
 AppState.state = {
-	list: [],
 	page: 1,
-	courses: [],
-
-	favourites:[],
-	favourite_list: []
+	courses: courses_data,
+	courses_map: courses_data.reduce((map, course) => {
+		map[course.id] = course;
+		return map;
+	},{}),
+	list: courses_data.slice(0,3),
+	favourites_list: [],
+	favourites_map: {}
 }
 
-const actions = AppState.createActions({
-	addFavourite: function(id){
-		let fav = this.state.favourites,
-		index = fav.indexOf(id);
+var actions = AppState.createActions({
+	loadMore: function(event){
+		var page = this.page + 1;
 
-		// add only if not exists
-		if(index === -1)
-		this.state.favourites.push(id)
+		this.page = page,
+		this.list = this.courses.slice(0, this.page * 3)
+	},
+	addFavourite: function(id){
+		this.favourites_map[id] = true;
+		this.favourites_list.push(this.courses_map[id])
 	},
 	removeFavourite: function(id){
-		let fav = this.state.favourites,
-		index = fav.indexOf(id);
-		
-		// remove only if exists
+		this.favourites_map[id] = false;
+		let index = this.favourites_list.findIndex((c)=>c.id === id)
 		if(index !== -1)
-		this.state.favourites.splice(index,1) 
+		this.favourites_list.splice(index,1)
 	},
-	loadMore: function(){
-		this.state.page++;
-	},
-	load: function(courses){
-		this.state.courses = courses;
-	}
 })
 
-// Derive list form page and original data
-AppState.addListener(function(state){
-	if(state.list.length !== state.page *3){
-		state.list = state.courses.slice(0, state.page * 3);
-	}
-	if(state.favourites.length !== state.favourite_list.length){
-		state.favourite_list = state.courses.filter((course) => state.favourites.indexOf(course.id) !== -1)
-	}
-})
-
-// Load original data
-actions.load(courses_data);
 
 const App = React.createClass({
 
 	getInitialState: function(){
-		return this.props.store.state
+		return this.props.store.state;
 	},
 
-	componentDidMount : function(){
-		this.props.store.addListener((state)=>this.setState(state))
+	componentDidMount: function(){
+		AppState.addListener((state) => {
+			this.setState({
+				page: state.page,
+				list: state.list,
+				favourites_list: state.favourites_list
+			})
+		})
 	},
 
 	render: function(){
@@ -201,8 +175,14 @@ const App = React.createClass({
 		      <div className="row">
 		        <div className="col-xs-12">
 					{/* <ShoppingCartList list={cart_list} /> */}
-					<FavouriteCoursesList list={this.state.favourite_list} />
+					<FavouritesCoursesList list={this.state.favourites_list} />
 					<CoursesList list={this.state.list} />
+		        </div>
+		      </div>
+		      <div className="row">
+		        <div className="col-xs-12">
+		          <hr />
+		          <button className="btn btn-default btn-block" onClick={actions.loadMore}> Pokaż więcej ... </button>
 		        </div>
 		      </div>
 		    </div>
@@ -217,5 +197,5 @@ const App = React.createClass({
 })
 
 
-ReactDOM.render(<App store={AppState} loadMore={actions.loadMore} />, document.getElementById('root'));
+ReactDOM.render(<App store={AppState} />, document.getElementById('root'));
 
