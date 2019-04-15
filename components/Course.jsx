@@ -2,6 +2,12 @@ const CourseDetails = ({data}) => (
 	<div>
 	  	<table className="table course_details">
 	  		<tbody>
+	  			<tr>
+	  				<th>Ocena</th>
+	  				<td>
+	  					<Rating max={5} value={3} />
+	  				</td>
+		  		</tr>
 		  		<tr>
 		  			<th>Autor</th>
 		  			<td>{data.author}</td>

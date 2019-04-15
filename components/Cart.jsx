@@ -11,3 +11,19 @@ const CartDetails = (props) => (
 		<CartButton in_cart={true} />
 	</div>
 )
+
+const ShoppingCartList = ({list}) =>(
+	<div>
+		<h1> Koszyk </h1>
+		<hr />
+		<div>
+			{list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
+				<div className="btn-group pull-right">
+					<Button label="Szczegóły kursu" />
+					<Button label="Przenieś do ulubionych" icon="star"/>
+				</div>
+				<div><b>Autor: </b> {data.author} <br/> <b>Czas trwania: </b> {data.duration} </div>
+			</Course>)}
+		</div>
+	</div>
+)
