@@ -17,7 +17,7 @@ AppState.setState({
 	cart_list: [],
 	cart_map: {},
 
-	activeTab: 'Kursy',
+	activeTab: 'Wyszukiwarka',
 })
 
 
