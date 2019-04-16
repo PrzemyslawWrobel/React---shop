@@ -11,6 +11,10 @@ AppState.setState({
 	},{}),
 	courses_list: courses_data.slice(0,3),
 
+	authors_map: courses_data.reduce((map, course)=>(
+		(map[course.author] = course.author) && map
+	),{}),
+
 	favourites_list: [],
 	favourites_map: {},
 
