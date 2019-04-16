@@ -11,8 +11,6 @@ const CoursesSearch = React.createClass({
 
 		event.persist();
 
-		console.log(event)
-
 		clearTimeout(this.pending);
 
 		this.pending = setTimeout(()=>{
@@ -37,12 +35,79 @@ const CoursesSearch = React.createClass({
 			<hr/>
 			<div className="list-group">
 				{this.state.filtered_list.map((course)=>(
-					<a href="#" key={course.id} className="list-group-item">
+					<a href="#" key={course.id} className={"list-group-item " + (this.props.selected === course? "active":"")}
+					   onClick={()=>this.props.onSelect(course)}>
 						<h4 className="list-group-item-heading"> {course.title} </h4>
 						<p className="list-group-item-text"> {course.author} </p>
 					</a>
 				))}
 			</div>
+		</div>
+	}
+})
+
+const CoursesEditor = React.createClass({
+
+	getInitialState: function(){
+		return {
+			selected: null
+		}
+	},
+
+	select: function(course){
+		this.setState({
+			selected: course
+		})
+	},
+
+
+	render: function(){
+		return <div>
+			<div className={this.state.selected? "col-xs-4" :  "col-xs-12"}>
+				<h1> Edytor Kursów </h1>
+				<hr/>
+				<CoursesSearch courses={this.props.courses} onSelect={this.select} selected={this.state.selected}></CoursesSearch>
+			</div>
+			{this.state.selected? <div className="col-xs-8">
+			  	<CourseForm course={this.state.selected}></CourseForm>
+			</div> : null}
+		</div>
+	}
+})
+
+const CourseForm = React.createClass({
+
+	getInitialState: function(){
+		return {
+			course: this.props.course
+		}
+	},
+
+	componentWillReceiveProps: function(nextProps){
+		this.setState({
+			course: nextProps.course
+		})
+	},
+
+	changedTitle: function(e){
+		let course = this.state.course;
+		course.title = e.target.value;
+
+		this.setState({
+			course: course
+		})
+	},
+
+	render: function(){
+		return <div>
+			<form>
+				<div className="form-group">
+					<label className="control-label">Nazwa Kursu:</label>
+					<div>
+						<input type="text" className="form-control" value={this.state.course.title} onChange={this.changedTitle}/>
+					</div>
+				</div>
+			</form>
 		</div>
 	}
 })
@@ -78,9 +143,7 @@ const App = React.createClass({
 		        <div className="col-xs-12">
 		        	<Tabs activeTab={this.state.activeTab}>
 						<TabPanel name="Wyszukiwarka">
-							<h1> Wyszukiwarka </h1>
-							<hr/>
-							<CoursesSearch courses={this.state.courses_source}></CoursesSearch>
+							<CoursesEditor courses={this.state.courses_source}></CoursesEditor>
 						</TabPanel>
 						<TabPanel name="Koszyk">
 							<ShoppingCartList list={this.state.cart_list} /> 
