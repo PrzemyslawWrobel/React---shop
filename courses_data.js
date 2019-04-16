@@ -490,7 +490,7 @@ var courses_data = [
 		"title": "Kurs ActionScript 3.0 - Programowanie we Flash'u ",
 		"description": "Każdy, kto miał przyjemność pracować we Flashu wie, że bez znajomości języka skryptowego ActionScript nie da się obejść w żadnym projekcie. AS3 to nie tylko podstawowe, niezbędne polecenia, ale w pełni funkcjonalny język programowania, dzięki któremu możemy stworzyć dynamiczne aplikacje, strony internetowe oraz prezentacje.",
 		"image": "http://eduweb.pl/Images/Training/big_f7038d24-1c28-4284-8a1d-38b4eb6d190a.png",
-		"author": "Autor:",
+		"author": "Grzegorz Róg",
 		"duration": "5 godzin 30 minut",
 		"price": 49.00,
 		"rating": 5,

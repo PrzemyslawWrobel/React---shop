@@ -19,6 +19,8 @@
   <div id="root"></div>
 
   <script type="text/javascript" src="courses_data.js"></script>
+  <script type="text/javascript" src="vendor/jquery-3.1.0.slim.min.js"></script>
+  <script type="text/javascript" src="vendor/typeahead.bundle.min.js"></script>
   <script type="text/babel" src="StateStore.js"></script>
   <script type="text/babel" src="components/Button.jsx"></script>
   <script type="text/babel" src="components/FavButton.jsx"></script>
@@ -26,10 +28,25 @@
   <script type="text/babel" src="components/Rating.jsx"></script>
   <script type="text/babel" src="components/Course.jsx"></script>
   <script type="text/babel" src="components/CoursesList.jsx"></script>
+  <script type="text/babel" src="components/CoursesSearch.jsx"></script>
+  <script type="text/babel" src="components/CourseForm.jsx"></script>
+  <script type="text/babel" src="components/CoursesEditor.jsx"></script>
   <script type="text/babel" src="components/FavouritesCoursesList.jsx"></script>
   <script type="text/babel" src="components/DragNDrop.jsx"></script>
   <script type="text/babel" src="components/Nav.jsx"></script>
   <script type="text/babel" src="components/App.jsx"></script>
   <script type="text/babel" src="app.jsx"></script>
+
+  <link href="vendor/typeahead.bundle.css" rel="stylesheet">
+  <script type="text/javascript">
+    var categories = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      // `states` is an array of state names defined in "The Basics"
+      local: courses_data.reduce(function(local, course) {
+        return local.concat(course.categories);
+      },[])
+    });
+  </script>
 </body>
 </html>
